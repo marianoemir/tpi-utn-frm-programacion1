@@ -84,26 +84,38 @@ def cargar_datos_csv(ruta_csv: str):
         return lista_paises, dicc_por_codigo
 
     except FileNotFoundError:
-        print("No se encontró el archivo CSV.")
+        print("No se encontro el archivo CSV.")
         return [], {}
+    
+def mostrar_todos_los_paises(lista_paises: list):
+    """
+    Muestra en pantalla todos los paises cargados en la lista.
+    Recibe por parametro la lista de objetos Paisdelmundo.
+    """
 
-if __name__ == "__main__": 
-    lista_paises, dicc_paises = cargar_datos_csv("paises.csv") 
-print("\nPrimeros países cargados:\n") 
-for pais in lista_paises: 
-    print(pais)
+    if not lista_paises:
+        print("No hay paises cargados.")
+        return
+
+    print("\nLISTA COMPLETA DE PAÍSES:\n")
+
+    # Recorremos la lista y mostramos cada país usando __str__()
+    for pais in lista_paises:
+        print(pais)
+
+    print(f"\nTotal de paises: {len(lista_paises)}")
 
 
-"""Estructura Principal del programa.
+#Estructura Principal del programa.
 if __name__ == "__main__":
     # Cargamos los datos del CSV
     lista_paises, dicc_paises = cargar_datos_csv("paises.csv")
 
     # Verificamos que se hayan cargado correctamente
     if lista_paises:
-        print(f"\nSe cargaron {len(lista_paises)} países correctamente.\n")
+        print(f"\nSe cargaron {len(lista_paises)} paises correctamente.\n")
         
-        # Acá empieza el menú principal
+        # Acá empieza el menu principal
         while True:
             print("\n=== MENÚ PRINCIPAL ===")
             print("1. Mostrar todos los países")
@@ -115,17 +127,14 @@ if __name__ == "__main__":
 
             if opcion == "1":
                 for p in lista_paises:
-                    print(p)
+                    mostrar_todos_los_paises(lista_paises)
+
 
             elif opcion == "2":
-                codigo = input("Ingrese el codigo del país: ")
-                if codigo.isdigit() and int(codigo) in dicc_paises:
-                    print(dicc_paises[int(codigo)])
-                else:
-                    print("Código invalido o no encontrado.")
+                pass
 
             elif opcion == "3":
-                print("Funcion pendiente (filtrar por continente).")
+                pass
 
             elif opcion == "0":
                 print("Saliendo del programa...")
@@ -134,4 +143,4 @@ if __name__ == "__main__":
             else:
                 print("La Opcion no valida.")
     else:
-        print("No se pudieron cargar los países.")"""
+        print("No se pudieron cargar los países.")
