@@ -5,9 +5,9 @@ import csv    #Sirve para leer archivos CSV (valores separados por comas)
 
 class Paisdelmundo:
 
-    # El método __init__ se ejecuta automáticamente cada vez que creamos un nuevo país.
+    # El método __init__ se ejecuta automaticamente cada vez que creamos un nuevo pais.
     def __init__(self, codigo: int, nombre: str, poblacion: int, superficie: int, continente: str):
-        # Guardamos los datos del país dentro del objeto
+        # Guardamos los datos del pais dentro del objeto
         self.codigo = codigo
         self.nombre = nombre
         self.poblacion = poblacion
@@ -16,7 +16,7 @@ class Paisdelmundo:
 
     # Este metodo sirve para mostrar el pais en texto cuando usamos "print(pais)"
     def __str__(self):
-        # {:,} pone comas en los números grandes (ejemplo: 45,376,763)
+        # {:,} pone comas en los numeros grandes (ejemplo: 45,376,763)
         return f"{self.codigo} - {self.nombre} | Pob: {self.poblacion:,} | Sup: {self.superficie:,} km² | {self.continente}"
 
     # Este metodo convierte el pais en un diccionario (util si luego queremos guardar en CSV)
@@ -86,7 +86,9 @@ def cargar_datos_csv(ruta_csv: str):
     except FileNotFoundError:
         print("No se encontro el archivo CSV.")
         return [], {}
-    
+
+
+
 def mostrar_todos_los_paises(lista_paises: list):
     """
     Muestra en pantalla todos los paises cargados en la lista.
@@ -97,13 +99,16 @@ def mostrar_todos_los_paises(lista_paises: list):
         print("No hay paises cargados.")
         return
 
-    print("\nLISTA COMPLETA DE PAÍSES:\n")
+    print("\nLISTA COMPLETA DE PAiSES:\n")
 
     # Recorremos la lista y mostramos cada país usando __str__()
     for pais in lista_paises:
         print(pais)
 
     print(f"\nTotal de paises: {len(lista_paises)}")
+
+
+
 
 
 #Estructura Principal del programa.
@@ -119,7 +124,7 @@ if __name__ == "__main__":
         while True:
             print("\n=== MENÚ PRINCIPAL ===")
             print("1. Mostrar todos los países")
-            print("2. Buscar país por código")
+            print("2. Buscar por coincidencia o busquedar parcial")
             print("3. Filtrar por continente")
             print("0. Salir")
 
