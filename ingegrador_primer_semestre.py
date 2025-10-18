@@ -10,8 +10,8 @@ class Paisdelmundo:
         # Guardamos los datos del pais dentro del objeto
         self.codigo = codigo
         self.nombre = nombre
-        self.poblacion =  superficie  
-        self.superficie = superficie
+        self.poblacion = int(poblacion)
+        self.superficie = int(superficie)
         self.continente = continente
         
 
