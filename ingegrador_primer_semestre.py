@@ -10,9 +10,10 @@ class Paisdelmundo:
         # Guardamos los datos del pais dentro del objeto
         self.codigo = codigo
         self.nombre = nombre
-        self.poblacion = poblacion
+        self.poblacion =  superficie  
         self.superficie = superficie
         self.continente = continente
+        
 
     # Este metodo sirve para mostrar el pais en texto cuando usamos "print(pais)"
     def __str__(self):
@@ -131,10 +132,7 @@ if __name__ == "__main__":
             opcion = input("Elija una opción: ").strip()
 
             if opcion == "1":
-                for p in lista_paises:
-                    mostrar_todos_los_paises(lista_paises)
-
-
+                mostrar_todos_los_paises(lista_paises)
             elif opcion == "2":
                 pass
 
