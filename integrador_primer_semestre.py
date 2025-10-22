@@ -141,7 +141,7 @@ def ordenar_paises_por_superficie(lista_paises: list):
                 lista_paises[j]= aux
     return lista_paises
 
- 
+
 #esta funcion calcula y muestra las estadisticas  
 
 def mostrar_estadisticas(lista_paises:list) :
@@ -183,13 +183,121 @@ def mostrar_estadisticas(lista_paises:list) :
             paises_por_continente[cont] += 1
 
   print("\n ESTADÍSTICAS GENERALES ")
-  print(f"➡ País con mayor población: {pais_mayor_pob.nombre} ({pais_mayor_pob.poblacion:,} hab.)")
-  print(f"➡ País con menor población: {pais_menor_pob.nombre} ({pais_menor_pob.poblacion:,} hab.)")
-  print(f"➡ Promedio de población: {promedio_pob:,.0f}")
-  print(f"➡ Promedio de superficie: {promedio_sup:,.0f} km²")
-  print("➡ Cantidad de países por continente:")
+  print(f"País con mayor población: {pais_mayor_pob.nombre} ({pais_mayor_pob.poblacion:,} hab.)")
+  print(f"País con menor población: {pais_menor_pob.nombre} ({pais_menor_pob.poblacion:,} hab.)")
+  print(f"Promedio de población: {promedio_pob:,.0f}")
+  print(f"Promedio de superficie: {promedio_sup:,.0f} km²")
+  print("Cantidad de países por continente:")
   for cont, cant in paises_por_continente.items():
         print(f"   - {cont}: {cant}")
+
+
+
+def agregar_pais(lista_paises: list, dicc_paises: dict, ruta_csv: str):
+    """
+    Versión simple y segura de agregar_pais.
+    Genera nuevo_codigo ANTES de escribir y maneja errores sin romper el programa.
+    """
+
+    print("\n=== AGREGAR NUEVO PAÍS ===")
+    print("(Escriba 0 y ENTER para cancelar en cualquier paso)")
+
+    #Nombre del Pais
+    while True:
+        nombre = input("Nombre del país: ").strip()
+        if nombre == "0":
+            print("Operación cancelada.")
+            return
+        if nombre == "":
+            print("Por favor, ingrese un nombre válido.")
+            continue
+        # validar duplicado por nombre
+        existe = any(p.nombre.lower() == nombre.lower() for p in lista_paises)
+        if existe:
+            print("Ese país ya existe. Intente con otro nombre o escriba 0 para cancelar.")
+            continue
+        nombre = nombre.capitalize()
+        break
+
+    #Poblacion del Pais
+    while True:
+        poblacion_str = input("Población (solo números): ").strip()
+        if poblacion_str == "0":
+            print("Operación cancelada.")
+            return
+        if not poblacion_str.isdigit():
+            print("Ingrese solo números.")
+            continue
+        poblacion = int(poblacion_str)
+        if poblacion <= 0:
+            print("La población debe ser mayor a 0.")
+            continue
+        break
+
+    #Superficie del Pais
+    while True:
+        superficie_str = input("Superficie en km² (solo números): ").strip()
+        if superficie_str == "0":
+            print("Operación cancelada.")
+            return
+        if not superficie_str.isdigit():
+            print("Ingrese solo números.")
+            continue
+        superficie = int(superficie_str)
+        if superficie <= 0:
+            print("La superficie debe ser mayor a 0.")
+            continue
+        break
+
+    #Continente del Pais
+    while True:
+        continente = input("Continente: ").strip()
+        if continente == "0":
+            print("Operación cancelada.")
+            return
+        if continente == "":
+            print("Por favor, ingrese un continente válido.")
+            continue
+        continente = continente.capitalize()
+        break
+
+    #Genera el codigo antes de escribir
+    if dicc_paises:
+        try:
+            nuevo_codigo = max(dicc_paises.keys()) + 1
+        except Exception:
+            # por si las claves no son enteros (caso raro)
+            claves_int = [int(k) for k in dicc_paises.keys()]
+            nuevo_codigo = max(claves_int) + 1
+    else:
+        nuevo_codigo = 1
+
+    #Crear el objeto y agregar en memoria
+    nuevo_pais = Paisdelmundo(nuevo_codigo, nombre, poblacion, superficie, continente)
+    lista_paises.append(nuevo_pais)
+    dicc_paises[nuevo_codigo] = nuevo_pais
+    guardado_en_memoria = True  #marca que ya lo pusimos en memoria
+
+    #Intentar escribir en el CSV (versión simple que añade newline para evitar "pegado")
+    try:
+        with open(ruta_csv, "a", encoding="utf-8") as archivo:
+            #siempre escribimos un salto de linea primero para separar del último registro
+            archivo.write(f"\n{nuevo_codigo},{nombre},{poblacion},{superficie},{continente}")
+        print(f"\nPaís '{nombre}' agregado con éxito (código: {nuevo_codigo})")
+    except Exception as e:
+        print(f"Error al guardar en el archivo: {e}")
+        #si algo fallo al guardar en disco revertimos la inserción en memoria
+        if guardado_en_memoria:
+            #eliminamos el ultimo elemento de la lista si coincide con el que agregamos
+            if lista_paises and lista_paises[-1].codigo == nuevo_codigo:
+                lista_paises.pop()
+            #sacamos del diccionario si esta
+            if nuevo_codigo in dicc_paises:
+                dicc_paises.pop(nuevo_codigo)
+        print("Se revirtió la operación en memoria.")
+
+
+
 
 
 
@@ -205,11 +313,12 @@ if __name__ == "__main__":
         # Acá empieza el menu principal
         while True:
             print("\n=== MENÚ PRINCIPAL ===")
-            print("1. Mostrar todos los países")
-            print("2. Buscar por coincidencia o busquedar parcial")
-            print("3. Filtrar por continente")
-            print("4. Mostrar estadisticas")
-            print("0. Salir")
+            print("1. Mostrar todos los países.")
+            print("2. Buscar por coincidencia o busqueda parcial.")
+            print("3. Filtrar por continente.")
+            print("4. Mostrar estadisticas.")
+            print("5. Agregar un pais.")
+            print("0. Salir.")
 
             opcion = input("Elija una opción: ").strip()
 
@@ -239,7 +348,10 @@ if __name__ == "__main__":
                     
             elif opcion == "4":
                 estadistica= mostrar_estadisticas(lista_paises)
-                
+            
+            elif opcion == "5":
+                agregar_pais(lista_paises, dicc_paises, "paises.csv")
+
             elif opcion == "0":
                 print("Saliendo del programa...")
                 break
