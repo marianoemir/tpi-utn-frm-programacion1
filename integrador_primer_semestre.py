@@ -107,6 +107,70 @@ def mostrar_todos_los_paises(lista_paises: list):
         print(pais)
 
     print(f"\nTotal de paises: {len(lista_paises)}")
+
+def buscar_pais_por_nombre(lista_paises: list):
+    """
+    Permite buscar un país por nombre.
+    El usuario elige si quiere coincidencia exacta o parcial.
+    """
+
+    if not lista_paises:
+        print("No hay países cargados.")
+        return
+
+    while True:
+        print("\n=== BUSCAR PAÍS POR NOMBRE ===")
+        print("1. Búsqueda exacta (nombre completo)")
+        print("2. Búsqueda parcial (parte del nombre)")
+        print("0. Volver al menú principal")
+
+        opcion = input("Elija una opción: ").strip()
+
+        # salir
+        if opcion == "0":
+            print("Volviendo al menú principal...")
+            break
+
+        # coincidencia exacta
+        elif opcion == "1":
+            nombre_buscar = input("Ingrese el nombre exacto del país: ").strip().lower()
+            if nombre_buscar == "":
+                print("Por favor, ingrese un nombre válido.")
+                continue
+
+            encontrado = False
+            for p in lista_paises:
+                if p.nombre.lower() == nombre_buscar:
+                    print(f"\n✅ País encontrado:\n{p}")
+                    encontrado = True
+                    break
+
+            if not encontrado:
+                print(f"No se encontró ningún país llamado '{nombre_buscar.capitalize()}'.")
+        
+        # coincidencia parcial
+        elif opcion == "2":
+            fragmento = input("Ingrese parte del nombre del país: ").strip().lower()
+            if fragmento == "":
+                print("Por favor, ingrese al menos una letra.")
+                continue
+
+            resultados = []
+            for p in lista_paises:
+                if fragmento in p.nombre.lower():
+                    resultados.append(p)
+
+            if resultados:
+                print(f"\nSe encontraron {len(resultados)} coincidencias:")
+                for pais in resultados:
+                    print(pais)
+            else:
+                print("No se encontraron países con ese fragmento de nombre.")
+
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+
 #creamos una funcion para ordenar los paises por nombre
 
 def ordenar_paises_por_nombre(lista_paises: list):
@@ -120,6 +184,80 @@ def ordenar_paises_por_nombre(lista_paises: list):
                 lista_paises[i]= lista_paises[j]
                 lista_paises[j]= aux
     return lista_paises
+
+
+def filtrar_paises(lista_paises: list):
+    """
+    Permite filtrar los países según:
+    1. Continente
+    2. Rango de población
+    3. Rango de superficie
+    """
+
+    if not lista_paises:
+        print("No hay países cargados.")
+        return
+
+    while True:
+        print("\n=== FILTRAR PAÍSES ===")
+        print("1. Por continente")
+        print("2. Por rango de población")
+        print("3. Por rango de superficie")
+        print("0. Volver al menú principal")
+
+        opcion = input("Elija una opción: ").strip()
+
+        if opcion == "1":
+            continente = input("Ingrese el nombre del continente: ").strip().lower()
+            resultados = [pais for pais in lista_paises if pais.continente.lower() == continente]
+            if resultados:
+                print(f"\nPaíses en el continente '{continente.capitalize()}':\n")
+                for pais in resultados:
+                    print(pais)
+                print(f"\nTotal: {len(resultados)} país(es)")
+            else:
+                print(f"No se encontraron países en el continente '{continente}'.")
+
+        elif opcion == "2":
+            try:
+                minimo = int(input("Ingrese el valor mínimo de población: "))
+                maximo = int(input("Ingrese el valor máximo de población: "))
+            except ValueError:
+                print("Debe ingresar números válidos.")
+                continue
+
+            resultados = [pais for pais in lista_paises if minimo <= pais.poblacion <= maximo]
+            if resultados:
+                print(f"\nPaíses con población entre {minimo:,} y {maximo:,}:\n")
+                for pais in resultados:
+                    print(pais)
+                print(f"\nTotal: {len(resultados)} país(es)")
+            else:
+                print("No se encontraron países en ese rango de población.")
+
+        elif opcion == "3":
+            try:
+                minimo = int(input("Ingrese el valor mínimo de superficie: "))
+                maximo = int(input("Ingrese el valor máximo de superficie: "))
+            except ValueError:
+                print("Debe ingresar números válidos.")
+                continue
+
+            resultados = [pais for pais in lista_paises if minimo <= pais.superficie <= maximo]
+            if resultados:
+                print(f"\nPaíses con superficie entre {minimo:,} y {maximo:,} km²:\n")
+                for pais in resultados:
+                    print(pais)
+                print(f"\nTotal: {len(resultados)} país(es)")
+            else:
+                print("No se encontraron países en ese rango de superficie.")
+
+        elif opcion == "0":
+            print("Volviendo al menú principal...")
+            break
+
+        else:
+            print("Opción no válida, intente de nuevo.")
 
 #creamos una funcion para ordenar los paises por poblacion
 def ordenar_paises_por_poblacion(lista_paises: list):
@@ -314,8 +452,8 @@ if __name__ == "__main__":
         while True:
             print("\n=== MENÚ PRINCIPAL ===")
             print("1. Mostrar todos los países.")
-            print("2. Buscar por coincidencia o busqueda parcial.")
-            print("3. Filtrar por continente.")
+            print("2. Buscar un país por nombre (coincidencia parcial o exacta)")
+            print("3. Filtrar países por (Continente, Rango de población, Rango de superficie)")
             print("4. Mostrar estadisticas.")
             print("5. Agregar un pais.")
             print("0. Salir.")
@@ -325,9 +463,11 @@ if __name__ == "__main__":
             if opcion == "1":
                 mostrar_todos_los_paises(lista_paises)
             elif opcion == "2":
-                pass
-
+                buscar_pais_por_nombre(lista_paises)
             elif opcion == "3":
+                filtrar_paises(lista_paises)
+
+            elif opcion == "4":
                 print("Seleccione una opcion para ordenar los paises: ")
                 print("1.Ordenar por nombre")
                 print("2.Ordenar por poblacion")
@@ -346,10 +486,10 @@ if __name__ == "__main__":
                 elif otra_opcion == "0":
                     print("Volviendo al menu principal...")
                     
-            elif opcion == "4":
+            elif opcion == "5":
                 estadistica= mostrar_estadisticas(lista_paises)
             
-            elif opcion == "5":
+            elif opcion == "6":
                 agregar_pais(lista_paises, dicc_paises, "paises.csv")
 
             elif opcion == "0":
