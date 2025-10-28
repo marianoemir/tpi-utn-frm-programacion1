@@ -141,7 +141,7 @@ def buscar_pais_por_nombre(lista_paises: list):
             encontrado = False
             for p in lista_paises:
                 if p.nombre.lower() == nombre_buscar:
-                    print(f"\n✅ País encontrado:\n{p}")
+                    print(f"\n País encontrado:\n{p}")
                     encontrado = True
                     break
 
