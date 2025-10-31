@@ -169,24 +169,9 @@ def buscar_pais_por_nombre(lista_paises: list):
 
         else:
             print("Opción no válida. Intente nuevamente.")
-
-
-#creamos una funcion para ordenar los paises por nombre
-
-def ordenar_paises_por_nombre(lista_paises: list):
-    #recibe por parametro la lista de objetos Paisdelmundo
-    #creamos un bucle para ordenar los paises si el nombre del pais es mayor al siguiente usamos una variable auxiliar
-    #para ir guardando el pais y luego ir intercambiando las posiciones
-    for i in range(len(lista_paises)):
-        for j in range(i+1, len(lista_paises)):
-            if lista_paises[i].nombre > lista_paises[j].nombre:
-                aux= lista_paises[i] 
-                lista_paises[i]= lista_paises[j]
-                lista_paises[j]= aux
-    return lista_paises
-
-
+            
 def filtrar_paises(lista_paises: list):
+
     """
     Permite filtrar los países según:
     1. Continente
@@ -258,6 +243,23 @@ def filtrar_paises(lista_paises: list):
 
         else:
             print("Opción no válida, intente de nuevo.")
+
+
+#Creamos una funcion para ordenar los paises por nombre
+
+def ordenar_paises_por_nombre(lista_paises: list):
+    #recibe por parametro la lista de objetos Paisdelmundo
+    #creamos un bucle para ordenar los paises si el nombre del pais es mayor al siguiente usamos una variable auxiliar
+    #para ir guardando el pais y luego ir intercambiando las posiciones
+    for i in range(len(lista_paises)):
+        for j in range(i+1, len(lista_paises)):
+            if lista_paises[i].nombre > lista_paises[j].nombre:
+                aux= lista_paises[i] 
+                lista_paises[i]= lista_paises[j]
+                lista_paises[j]= aux
+    return lista_paises
+
+
 
 #creamos una funcion para ordenar los paises por poblacion
 def ordenar_paises_por_poblacion(lista_paises: list):
@@ -454,8 +456,9 @@ if __name__ == "__main__":
             print("1. Mostrar todos los países.")
             print("2. Buscar un país por nombre (coincidencia parcial o exacta)")
             print("3. Filtrar países por (Continente, Rango de población, Rango de superficie)")
-            print("4. Mostrar estadisticas.")
-            print("5. Agregar un pais.")
+            print("4. Ordenar países")
+            print("5. Mostrar estadisticas.")
+            print("6. Agregar un pais.")
             print("0. Salir.")
 
             opcion = input("Elija una opción: ").strip()
