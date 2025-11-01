@@ -13,7 +13,7 @@ El trabajo integra los contenidos vistos en la materia, aplicando la lógica de 
 
 ### Datos institucionales
 
-Universidad: Universidad Tecnológica Nacional (UTN).
+Universidad: Universidad Tecnológica Nacional (UTN).  
 Facultad Regional: [Facultad Regional Mendoza (UTN FRM)].
 Carrera: Tecnicatura Universitaria en Programación.
 Asignatura: Programación I.
@@ -24,7 +24,7 @@ Docente: Magni Negri, Gerardo Luis.
 Integrantes del grupo:
 
 Mariano Chirino.
-
+Brisa Muñoz.
 
 
 ### Estructura:
@@ -41,7 +41,7 @@ Para ejecutar el programa correctamente:
 Descargar o clonar la carpeta del proyecto completa, asegurándose de que el archivo
 integrador_primer_semestre.py y paises.csv estén en la misma carpeta.
 
-Opción 1 – Desde Visual Studio Code (VS Code):
+**Opción 1 – Desde Visual Studio Code (VS Code)::**
 
 Abrir la carpeta del proyecto en VS Code.
 
@@ -51,11 +51,11 @@ Presionar el botón “Run Python File” (ícono ▶️ en la esquina superior 
 
 El menú principal aparecerá en la consola integrada.
 
-Opción 2 – Windows (CMD Y POWERSHELL)
+**Opción 2 – Windows (CMD Y POWERSHELL):**
 
 Para ejecutar el programa correctamente, asegurarse de tener instalada una versión de Python 3.10 o superior y de que el archivo paises.csv se encuentre en la misma carpeta que integrador_primer_semestre.py.
 
-1.Windows (CMD)
+**1. Windows (CMD)**
 
 Abrir el Símbolo del sistema (CMD).
 
@@ -67,7 +67,7 @@ Ejecutar el programa:
 
 python integrador_primer_semestre.py
 
-2. Windows (PowerShell)
+**2. Windows (PowerShell)**
 
 Abrir PowerShell.
 
@@ -83,7 +83,7 @@ Si ese comando no funcionara:
 py .\integrador_primer_semestre.py
 
 
-Opción 3 – Linux (Ubuntu, Debian, etc.)
+**Opción 3 – Linux (Ubuntu, Debian, etc.)**
 
 Abrir una terminal.
 
@@ -94,7 +94,7 @@ cd /ruta/hasta/la/carpeta/proyecto
 Ejecutar el programa:
 python3 integrador_primer_semestre.py
 
-4. macOS –
+**4. macOS –**
 
 Abrir la Terminal.
 
@@ -106,7 +106,7 @@ Ejecutar el programa:
 
 python3 integrador_primer_semestre.py
 
-Recomendaciones generales
+**Recomendaciones generales:**
 
 Asegurarse de que el archivo paises.csv esté en la misma carpeta que el programa.
 
@@ -141,7 +141,7 @@ codigo,nombre,poblacion,superficie,continente
 9,España,47450795,505990,Europa
 10,Argelia,47400000,2381741,África
 
-1. Búsqueda parcial de país
+***1. Búsqueda parcial de país***
 
 === MENÚ PRINCIPAL ===
 2
@@ -157,7 +157,7 @@ Se encontraron 2 coincidencias:
 8 - Canadá | Pob: 38,000,000 | Sup: 9,984,670 km² | América
 
 
-2. Agregar un nuevo país
+***2. Agregar un nuevo país***
 
 Entrada:
 
@@ -176,7 +176,7 @@ País 'Chile' agregado con éxito (código: 11)
 El archivo paises.csv se actualiza con:
 11,Chile,19107216,756102,América
 
-3. Mostrar estadísticas generales
+***3. Mostrar estadísticas generales***
 
 Entrada:
 === MENÚ PRINCIPAL ===
@@ -195,7 +195,7 @@ Cantidad de países por continente:
    - Oceanía: 1
    - Asia: 2
 
-4. Ordenar países por población
+***4. Ordenar países por población***
 
 Entrada:
 
@@ -225,7 +225,7 @@ LISTA COMPLETA DE PAiSES:
 
 Total de paises: 10
 
-5. Filtrar países por continente
+***5. Filtrar países por continente***
 
 Entrada:
 === MENÚ PRINCIPAL ===
