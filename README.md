@@ -13,19 +13,27 @@ El trabajo integra los contenidos vistos en la materia, aplicando la lógica de 
 
 ### Datos institucionales
 
-Universidad: Universidad Tecnológica Nacional (UTN).  
+Universidad: Universidad Tecnológica Nacional (UTN). 
+
 Facultad Regional: [Facultad Regional Mendoza (UTN FRM)].
-Carrera: Tecnicatura Universitaria en Programación.
-Asignatura: Programación I.
-Año lectivo: 2025 – 2° Cuatrimestre.
-Comisión: 1.
-Docente: Magni Negri, Gerardo Luis.
+
+Carrera: Tecnicatura Universitaria en Programación. 
+
+Asignatura: Programación I. 
+
+Año lectivo: 2025 – 1° Semestre .
+
+Comisión: 1. 
+
+Docente: Magni Negri, Gerardo Luis. 
 
 Integrantes del grupo:
 
 Mariano Chirino.
 Brisa Muñoz.
-
+Ivana Gutierez.
+Julieta Chavez.
+Rayssa Alejo.
 
 ### Estructura:
 
@@ -106,7 +114,7 @@ Ejecutar el programa:
 
 python3 integrador_primer_semestre.py
 
-**Recomendaciones generales:**
+### Recomendaciones generales:
 
 Asegurarse de que el archivo paises.csv esté en la misma carpeta que el programa.
 
