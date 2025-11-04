@@ -80,14 +80,18 @@ def mostrar_todos_los_paises(lista_paises: list):
 
 # === Buscar país por nombre (exacto o parcial) ===
 def buscar_pais_por_nombre(lista_paises: list):
+    """
+    Permite buscar un país por nombre o por código.
+    Incluye búsqueda exacta o parcial y manejo de errores.
+    """
     if not lista_paises:
         print("No hay países cargados.")
         return
 
     while True:
-        print("\n=== BUSCAR PAÍS POR NOMBRE ===")
-        print("1. Búsqueda exacta")
-        print("2. Búsqueda parcial")
+        print("\n=== BUSCAR PAÍS ===")
+        print("1. Búsqueda exacta (por nombre o código)")
+        print("2. Búsqueda parcial (por nombre)")
         print("0. Volver al menú principal")
 
         opcion = input("Elija una opción: ").strip()
@@ -96,30 +100,70 @@ def buscar_pais_por_nombre(lista_paises: list):
             break
 
         elif opcion == "1":
-            nombre_buscar = input("Ingrese el nombre exacto: ").strip().lower()
-            if not nombre_buscar:
-                print("Ingrese un nombre válido.")
-                continue
+            while True:
+                print("\n--- BÚSQUEDA EXACTA ---")
+                print("1. Buscar por nombre")
+                print("2. Buscar por código")
+                print("0. Volver")
+                subop = input("Elija una opción: ").strip()
 
-            encontrado = False
-            for p in lista_paises:
-                if quitar_acentos(p.nombre.lower()) == quitar_acentos(nombre_buscar):
-                    print(f"\nPaís encontrado:\n{p}")
-                    encontrado = True
+                if subop == "0":
                     break
 
-            if not encontrado:
-                print(f"No se encontró '{nombre_buscar.capitalize()}'.")
+                elif subop == "1":
+                    nombre_buscar = input("Ingrese el nombre exacto del país (o 0 para salir): ").strip()
+                    if nombre_buscar == "0":
+                        break
+                    if not nombre_buscar:
+                        print("Ingrese un nombre válido.")
+                        continue
+
+                    encontrado = False
+                    for p in lista_paises:
+                        if quitar_acentos(p.nombre.lower()) == quitar_acentos(nombre_buscar.lower()):
+                            print(f"\nPaís encontrado:\n{p}")
+                            encontrado = True
+                            break
+
+                    if not encontrado:
+                        print(f"No se encontró '{nombre_buscar.capitalize()}'. Intente nuevamente.")
+
+                elif subop == "2":
+                    while True:
+                        codigo_str = input("Ingrese el código del país (o 0 para salir): ").strip()
+                        if codigo_str == "0":
+                            break
+                        if not codigo_str.isdigit():
+                            print("Debe ingresar un número válido.")
+                            continue
+
+                        codigo = int(codigo_str)
+                        encontrado = False
+                        for p in lista_paises:
+                            if p.codigo == codigo:
+                                print(f"\nPaís encontrado:\n{p}")
+                                encontrado = True
+                                break
+
+                        if encontrado:
+                            break  # vuelve al submenú principal de búsqueda exacta
+                        else:
+                            print(f"No se encontró ningún país con el código {codigo}. Intente nuevamente.")
+
+                else:
+                    print("Opción no válida, intente nuevamente.")
 
         elif opcion == "2":
-            fragmento = input("Ingrese parte del nombre: ").strip().lower()
+            fragmento = input("Ingrese parte del nombre (o 0 para salir): ").strip()
+            if fragmento == "0":
+                continue
             if not fragmento:
                 print("Ingrese al menos una letra.")
                 continue
 
             resultados = []
             for p in lista_paises:
-                if quitar_acentos(fragmento) in quitar_acentos(p.nombre.lower()):
+                if quitar_acentos(fragmento.lower()) in quitar_acentos(p.nombre.lower()):
                     resultados.append(p)
 
             if resultados:
@@ -128,8 +172,11 @@ def buscar_pais_por_nombre(lista_paises: list):
                     print(pais)
             else:
                 print("No se encontraron coincidencias.")
+
         else:
             print("Opción no válida.")
+
+
 
 # === Filtrar países por distintos criterios ===
 def filtrar_paises(lista_paises: list):
@@ -295,32 +342,47 @@ def agregar_pais(lista_paises: list, dicc_paises: dict, ruta_csv: str):
             superficie = int(superficie_str)
             break
 
-        continente = input("Continente: ").strip().capitalize()
+        # --- Detección y corrección automática de acentos en continentes ---
+        continentes_validos = {
+            "america": "América",
+            "africa": "África",
+            "europa": "Europa",
+            "asia": "Asia",
+            "oceania": "Oceanía",
+            "antartida": "Antártida"
+        }
+
+        continente = input("Continente: ").strip().lower()
         if continente == "0":
             print("Operación cancelada.")
             return
+
+        continente_sin_acentos = quitar_acentos(continente)
+        continente_final = continentes_validos.get(continente_sin_acentos, continente.capitalize())
 
         if dicc_paises:
             nuevo_codigo = max(dicc_paises.keys()) + 1
         else:
             nuevo_codigo = 1
 
-        nuevo_pais = Paisdelmundo(nuevo_codigo, nombre, poblacion, superficie, continente)
+        nuevo_pais = Paisdelmundo(nuevo_codigo, nombre, poblacion, superficie, continente_final)
         lista_paises.append(nuevo_pais)
         dicc_paises[nuevo_codigo] = nuevo_pais
 
         try:
             with open(ruta_csv, "a", encoding="utf-8") as archivo:
-                archivo.write(f"\n{nuevo_codigo},{nombre},{poblacion},{superficie},{continente}")
-            print(f"\nPaís '{nombre}' agregado con éxito (código: {nuevo_codigo})")
+                archivo.write(f"\n{nuevo_codigo},{nombre},{poblacion},{superficie},{continente_final}")
+            print(f"\nPaís '{nombre}' agregado con éxito (código: {nuevo_codigo}, continente: {continente_final})")
         except Exception as e:
             print(f"Error al guardar en archivo: {e}")
 
-        
+        # Pregunta si desea agregar otro país
         continuar = input("\n¿Desea agregar otro país? (s/n): ").strip().lower()
         if continuar != "s":
             print("Volviendo al menú principal...")
             break
+
+
 
 # === Programa principal con menú ===
 if __name__ == "__main__":
