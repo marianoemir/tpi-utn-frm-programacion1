@@ -11,8 +11,8 @@ Agregar nuevos países con validaciones automáticas.
 
 El trabajo integra los contenidos vistos en la materia, aplicando la lógica de programación, validación de datos, uso de clases, métodos y manejo de archivos.
 
-### Link a repositorio de GitHub: https://github.com/marianoemir/tpi-utn-frm-programacion1  
-### Link a Video Explicativo sobre el Proyecto: https://youtu.be/MgZ8Bt9ajhs?si=JXEUdstO62qltXJs
+Link a repositorio de GitHub: https://github.com/marianoemir/tpi-utn-frm-programacion1  
+Link a Video Explicativo sobre el Proyecto: https://youtu.be/MgZ8Bt9ajhs?si=JXEUdstO62qltXJs
 
 ### Datos institucionales
 
