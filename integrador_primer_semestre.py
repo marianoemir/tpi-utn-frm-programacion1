@@ -1,181 +1,10 @@
-import csv  # Para leer archivos CSV
+import os
+from Paisdelmundo import Paisdelmundo
 
-# === Clase principal que representa un país ===
-class Paisdelmundo:
-    def __init__(self, codigo: int, nombre: str, poblacion: int, superficie: int, continente: str):
-        self.codigo = codigo
-        self.nombre = nombre
-        self.poblacion = int(poblacion)
-        self.superficie = int(superficie)
-        self.continente = continente
 
-    def __str__(self):
-        return f"{self.codigo} - {self.nombre} | Pob: {self.poblacion:,} | Sup: {self.superficie:,} km² | {self.continente}"
-
-    def a_diccionario(self):
-        return {
-            "codigo": self.codigo,
-            "nombre": self.nombre,
-            "poblacion": self.poblacion,
-            "superficie": self.superficie,
-            "continente": self.continente
-        }
-
-# === Función auxiliar para eliminar acentos ===
-def quitar_acentos(texto: str):
-    reemplazos = (
-        ("á", "a"), ("é", "e"), ("í", "i"),
-        ("ó", "o"), ("ú", "u"),
-        ("Á", "A"), ("É", "E"), ("Í", "I"),
-        ("Ó", "O"), ("Ú", "U")
-    )
-    for a, b in reemplazos:
-        texto = texto.replace(a, b)
-    return texto
-
-# === Leer el archivo CSV y crear estructuras ===
-def cargar_datos_csv(ruta_csv: str):
-    lista_paises = []
-    dicc_por_codigo = {}
-
-    try:
-        with open(ruta_csv, "r", encoding="utf-8") as archivo:
-            lector = csv.DictReader(archivo)
-            for fila in lector:
-                try:
-                    codigo = int(fila["codigo"])
-                    nombre = fila["nombre"].strip()
-                    poblacion = int(fila["poblacion"])
-                    superficie = int(fila["superficie"])
-                    continente = fila["continente"].strip()
-
-                    if codigo in dicc_por_codigo:
-                        print(f"Código duplicado ({codigo}) para {nombre}, se omite.")
-                        continue
-
-                    pais = Paisdelmundo(codigo, nombre, poblacion, superficie, continente)
-                    lista_paises.append(pais)
-                    dicc_por_codigo[codigo] = pais
-
-                except Exception as e:
-                    print(f"Error al procesar fila: {fila} ({e})")
-
-        print(f"Se cargaron {len(lista_paises)} países desde {ruta_csv}")
-        return lista_paises, dicc_por_codigo
-
-    except FileNotFoundError:
-        print("No se encontró el archivo CSV.")
-        return [], {}
-
-# === Mostrar todos los países cargados ===
-def mostrar_todos_los_paises(lista_paises: list):
-    if not lista_paises:
-        print("No hay países cargados.")
-        return
-
-    print("\nLISTA COMPLETA DE PAÍSES:\n")
-    for pais in lista_paises:
-        print(pais)
-    print(f"\nTotal de países: {len(lista_paises)}")
-
-# === Buscar país por nombre (exacto o parcial) ===
-def buscar_pais_por_nombre(lista_paises: list):
-    """
-    Permite buscar un país por nombre o por código.
-    Incluye búsqueda exacta o parcial y manejo de errores.
-    """
-    if not lista_paises:
-        print("No hay países cargados.")
-        return
-
-    while True:
-        print("\n=== BUSCAR PAÍS ===")
-        print("1. Búsqueda exacta (por nombre o código)")
-        print("2. Búsqueda parcial (por nombre)")
-        print("0. Volver al menú principal")
-
-        opcion = input("Elija una opción: ").strip()
-
-        if opcion == "0":
-            break
-
-        elif opcion == "1":
-            while True:
-                print("\n--- BÚSQUEDA EXACTA ---")
-                print("1. Buscar por nombre")
-                print("2. Buscar por código")
-                print("0. Volver")
-                subop = input("Elija una opción: ").strip()
-
-                if subop == "0":
-                    break
-
-                elif subop == "1":
-                    nombre_buscar = input("Ingrese el nombre exacto del país (o 0 para salir): ").strip()
-                    if nombre_buscar == "0":
-                        break
-                    if not nombre_buscar:
-                        print("Ingrese un nombre válido.")
-                        continue
-
-                    encontrado = False
-                    for p in lista_paises:
-                        if quitar_acentos(p.nombre.lower()) == quitar_acentos(nombre_buscar.lower()):
-                            print(f"\nPaís encontrado:\n{p}")
-                            encontrado = True
-                            break
-
-                    if not encontrado:
-                        print(f"No se encontró '{nombre_buscar.capitalize()}'. Intente nuevamente.")
-
-                elif subop == "2":
-                    while True:
-                        codigo_str = input("Ingrese el código del país (o 0 para salir): ").strip()
-                        if codigo_str == "0":
-                            break
-                        if not codigo_str.isdigit():
-                            print("Debe ingresar un número válido.")
-                            continue
-
-                        codigo = int(codigo_str)
-                        encontrado = False
-                        for p in lista_paises:
-                            if p.codigo == codigo:
-                                print(f"\nPaís encontrado:\n{p}")
-                                encontrado = True
-                                break
-
-                        if encontrado:
-                            break  # vuelve al submenú principal de búsqueda exacta
-                        else:
-                            print(f"No se encontró ningún país con el código {codigo}. Intente nuevamente.")
-
-                else:
-                    print("Opción no válida, intente nuevamente.")
-
-        elif opcion == "2":
-            fragmento = input("Ingrese parte del nombre (o 0 para salir): ").strip()
-            if fragmento == "0":
-                continue
-            if not fragmento:
-                print("Ingrese al menos una letra.")
-                continue
-
-            resultados = []
-            for p in lista_paises:
-                if quitar_acentos(fragmento.lower()) in quitar_acentos(p.nombre.lower()):
-                    resultados.append(p)
-
-            if resultados:
-                print(f"\nSe encontraron {len(resultados)} coincidencias:")
-                for pais in resultados:
-                    print(pais)
-            else:
-                print("No se encontraron coincidencias.")
-
-        else:
-            print("Opción no válida.")
-
+# Detectar automáticamente la ruta del archivo CSV
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ruta_csv = os.path.join(BASE_DIR, "paises.csv")
 
 
 # === Filtrar países por distintos criterios ===
@@ -194,8 +23,10 @@ def filtrar_paises(lista_paises: list):
         opcion = input("Elija una opción: ").strip()
 
         if opcion == "1":
-            continente = input("Ingrese el nombre del continente: ").strip().lower()
-            resultados = [p for p in lista_paises if quitar_acentos(p.continente.lower()) == quitar_acentos(continente)]
+            continente = input(
+                "Ingrese el nombre del continente: ").strip().lower()
+            resultados = [p for p in lista_paises if Paisdelmundo.quitar_acentos(p.continente.lower()) ==
+                          Paisdelmundo.quitar_acentos(continente)]
             if resultados:
                 print(f"\nPaíses en '{continente.capitalize()}':\n")
                 for pais in resultados:
@@ -211,7 +42,8 @@ def filtrar_paises(lista_paises: list):
             except ValueError:
                 print("Ingrese valores numéricos válidos.")
                 continue
-            resultados = [p for p in lista_paises if minimo <= p.poblacion <= maximo]
+            resultados = [p for p in lista_paises if minimo <=
+                          p.poblacion <= maximo]
             for pais in resultados:
                 print(pais)
             print(f"\nTotal: {len(resultados)} país(es)")
@@ -223,7 +55,8 @@ def filtrar_paises(lista_paises: list):
             except ValueError:
                 print("Ingrese valores numéricos válidos.")
                 continue
-            resultados = [p for p in lista_paises if minimo <= p.superficie <= maximo]
+            resultados = [p for p in lista_paises if minimo <=
+                          p.superficie <= maximo]
             for pais in resultados:
                 print(pais)
             print(f"\nTotal: {len(resultados)} país(es)")
@@ -234,6 +67,8 @@ def filtrar_paises(lista_paises: list):
             print("Opción no válida.")
 
 # === Funciones de ordenamiento ===
+
+
 def ordenar_paises_por_nombre(lista_paises: list):
     for i in range(len(lista_paises)):
         for j in range(i+1, len(lista_paises)):
@@ -243,6 +78,7 @@ def ordenar_paises_por_nombre(lista_paises: list):
                 lista_paises[j] = aux
     return lista_paises
 
+
 def ordenar_paises_por_poblacion(lista_paises: list):
     for i in range(len(lista_paises)):
         for j in range(i+1, len(lista_paises)):
@@ -251,6 +87,7 @@ def ordenar_paises_por_poblacion(lista_paises: list):
                 lista_paises[i] = lista_paises[j]
                 lista_paises[j] = aux
     return lista_paises
+
 
 def ordenar_paises_por_superficie(lista_paises: list):
     for i in range(len(lista_paises)):
@@ -262,6 +99,8 @@ def ordenar_paises_por_superficie(lista_paises: list):
     return lista_paises
 
 # === Calcular y mostrar estadísticas ===
+
+
 def mostrar_estadisticas(lista_paises: list):
     if not lista_paises:
         print("No hay países cargados.")
@@ -293,8 +132,10 @@ def mostrar_estadisticas(lista_paises: list):
             paises_por_continente[cont] += 1
 
     print("\n=== ESTADÍSTICAS GENERALES ===")
-    print(f"País con mayor población: {pais_mayor_pob.nombre} ({pais_mayor_pob.poblacion:,} hab.)")
-    print(f"País con menor población: {pais_menor_pob.nombre} ({pais_menor_pob.poblacion:,} hab.)")
+    print(
+        f"País con mayor población: {pais_mayor_pob.nombre} ({pais_mayor_pob.poblacion:,} hab.)")
+    print(
+        f"País con menor población: {pais_menor_pob.nombre} ({pais_menor_pob.poblacion:,} hab.)")
     print(f"Promedio de población: {promedio_pob:,.0f}")
     print(f"Promedio de superficie: {promedio_sup:,.0f} km²")
     print("Cantidad de países por continente:")
@@ -302,6 +143,8 @@ def mostrar_estadisticas(lista_paises: list):
         print(f"   - {cont}: {cant}")
 
 # === Agregar un nuevo país ===
+
+
 def agregar_pais(lista_paises: list, dicc_paises: dict, ruta_csv: str):
     while True:
         print("\n=== AGREGAR NUEVO PAÍS ===")
@@ -314,7 +157,8 @@ def agregar_pais(lista_paises: list, dicc_paises: dict, ruta_csv: str):
         if nombre == "":
             print("Ingrese un nombre válido.")
             continue
-        existe = any(quitar_acentos(p.nombre.lower()) == quitar_acentos(nombre.lower()) for p in lista_paises)
+        existe = any(Paisdelmundo.quitar_acentos(p.nombre.lower()) ==
+                     Paisdelmundo.quitar_acentos(nombre.lower()) for p in lista_paises)
         if existe:
             print("Ese país ya existe.")
             continue
@@ -357,36 +201,41 @@ def agregar_pais(lista_paises: list, dicc_paises: dict, ruta_csv: str):
             print("Operación cancelada.")
             return
 
-        continente_sin_acentos = quitar_acentos(continente)
-        continente_final = continentes_validos.get(continente_sin_acentos, continente.capitalize())
+        continente_sin_acentos = Paisdelmundo.quitar_acentos(continente)
+        continente_final = continentes_validos.get(
+            continente_sin_acentos, continente.capitalize())
 
         if dicc_paises:
             nuevo_codigo = max(dicc_paises.keys()) + 1
         else:
             nuevo_codigo = 1
 
-        nuevo_pais = Paisdelmundo(nuevo_codigo, nombre, poblacion, superficie, continente_final)
+        nuevo_pais = Paisdelmundo(
+            nuevo_codigo, nombre, poblacion, superficie, continente_final)
         lista_paises.append(nuevo_pais)
         dicc_paises[nuevo_codigo] = nuevo_pais
 
         try:
-            with open(ruta_csv, "a", encoding="utf-8") as archivo:
-                archivo.write(f"\n{nuevo_codigo},{nombre},{poblacion},{superficie},{continente_final}")
-            print(f"\nPaís '{nombre}' agregado con éxito (código: {nuevo_codigo}, continente: {continente_final})")
+            with open(
+                    ruta_csv, "a", encoding="utf-8") as archivo:
+                archivo.write(
+                    f"\n{nuevo_codigo},{nombre},{poblacion},{superficie},{continente_final}")
+            print(
+                f"\nPaís '{nombre}' agregado con éxito (código: {nuevo_codigo}, continente: {continente_final})")
         except Exception as e:
             print(f"Error al guardar en archivo: {e}")
 
         # Pregunta si desea agregar otro país
-        continuar = input("\n¿Desea agregar otro país? (s/n): ").strip().lower()
+        continuar = input(
+            "\n¿Desea agregar otro país? (s/n): ").strip().lower()
         if continuar != "s":
             print("Volviendo al menú principal...")
             break
 
 
-
 # === Programa principal con menú ===
 if __name__ == "__main__":
-    lista_paises, dicc_paises = cargar_datos_csv("paises.csv")
+    lista_paises, dicc_paises = Paisdelmundo.cargar_datos_csv(ruta_csv)
 
     if lista_paises:
         print(f"\nSe cargaron {len(lista_paises)} países correctamente.\n")
@@ -404,9 +253,9 @@ if __name__ == "__main__":
             opcion = input("Elija una opción: ").strip()
 
             if opcion == "1":
-                mostrar_todos_los_paises(lista_paises)
+                Paisdelmundo.mostrar_todos_los_paises(lista_paises)
             elif opcion == "2":
-                buscar_pais_por_nombre(lista_paises)
+                Paisdelmundo.buscar_pais(lista_paises)
             elif opcion == "3":
                 filtrar_paises(lista_paises)
             elif opcion == "4":
@@ -416,15 +265,19 @@ if __name__ == "__main__":
                 print("0. Volver")
                 sub = input("Elija una opción: ").strip()
                 if sub == "1":
-                    mostrar_todos_los_paises(ordenar_paises_por_nombre(lista_paises))
+                    Paisdelmundo.mostrar_todos_los_paises(
+                        ordenar_paises_por_nombre(lista_paises))
                 elif sub == "2":
-                    mostrar_todos_los_paises(ordenar_paises_por_poblacion(lista_paises))
+                    Paisdelmundo.mostrar_todos_los_paises(
+                        ordenar_paises_por_poblacion(lista_paises))
                 elif sub == "3":
-                    mostrar_todos_los_paises(ordenar_paises_por_superficie(lista_paises))
+                    Paisdelmundo.mostrar_todos_los_paises(
+                        ordenar_paises_por_superficie(lista_paises))
             elif opcion == "5":
                 mostrar_estadisticas(lista_paises)
             elif opcion == "6":
-                agregar_pais(lista_paises, dicc_paises, "paises.csv")
+                agregar_pais(lista_paises, dicc_paises,
+                             ruta_csv)
             elif opcion == "0":
                 print("Saliendo del programa...")
                 break
