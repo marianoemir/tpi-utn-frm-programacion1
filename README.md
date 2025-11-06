@@ -11,6 +11,9 @@ Agregar nuevos países con validaciones automáticas.
 
 El trabajo integra los contenidos vistos en la materia, aplicando la lógica de programación, validación de datos, uso de clases, métodos y manejo de archivos.
 
+### Link a repositorio de GitHub: https://github.com/marianoemir/tpi-utn-frm-programacion1  
+### Link a Video Explicativo sobre el Proyecto: https://youtu.be/MgZ8Bt9ajhs?si=JXEUdstO62qltXJs
+
 ### Datos institucionales
 
 Universidad: Universidad Tecnológica Nacional (UTN). 
@@ -127,11 +130,10 @@ Para salir del programa, seleccionar la opción 0 en el menú principal.
 import csv 
 csv es parte de la librería estándar de Python, cualquier persona que tenga Python instalado (de la versión correcta) podrá ejecutar el proyecto sin necesidad de instalar nada adicional.
 
+import os 
+os es parte de la librería estándar de Python, cualquier persona que tenga Python instalado (de la versión correcta) podrá ejecutar el proyecto sin necesidad de instalar nada adicional.
+
 La versión mínima de Python que se necesita, por ejemplo: Python 3.10+.
-
-Link a repositorio de GitHub: https://github.com/marianoemir/tpi-utn-frm-programacion1  
-Link a Video del Proyecto: 
-
 
 ### Ejemplos de entrada y salida:
 
